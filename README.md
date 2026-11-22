@@ -4,74 +4,76 @@ A weekly digest of what matters at the intersection of **cybersecurity and artif
 
 Maintained by [@roatienza](https://github.com/roatienza). New edition every Monday.
 
-**Latest edition: [Week 46 — Nov 9–16, 2026](#week-46--nov-916-2026)**
+**Latest edition: [Week 47 — Nov 16–23, 2026](issues/2026-W47-nov-16-23.md)**
+
+**Table of contents** (latest first):
+
+| # | Edition | Week | Highlights |
+|---|---------|------|------------|
+| 1 | [Week 47 — Nov 16–23, 2026](issues/2026-W47-nov-16-23.md) | Nov 16–23, 2026 | GTIG exploit_agent; EC ARTEx breach; Cairn zero-day; MAI Cyber 2 Flash; Applied Compute $4.5B |
+| 2 | [Week 46 — Nov 9–16, 2026](issues/2026-W46-nov-09-16.md) | Nov 9–16, 2026 | FBI ARTEx flash alert; Claude Fable/Mythos 5.2; Cisco AI Defense × Mythos; Cloudflare agentic-web; CHECKMATE/HPTSA |
 
 ---
 
-## Week 46 — Nov 9–16, 2026
+# Week 47 — Nov 16–23, 2026
 
-### 🔴 Top story: FBI flash alert on ARTEx — autonomous hacking "in under three hours"
+## 🔴 Top story: Google confirms the first observed fully autonomous AI attack chain — and the EU Commission falls to ARTEx
 
-The FBI issued a **flash advisory** warning that threat actors are using **ARTEx**, an open-source AI-powered penetration-testing framework, to automate multi-phase intrusions "at machine speed, from reconnaissance through data exfiltration." Key facts:
+Two events the same week moved the "agentic offense" debate from forecast to fact:
 
-- **Speed:** Some intrusions progressed *from initial targeting to privileged access in under three hours* ([TechCrunch](https://techcrunch.com/2026/11/16/fbi-says-artex-ai-open-source-hacking-tool-used-to-breach-networks-in-under-three-hours), [The Record](https://therecord.media/artex-ai-tool-fbi-flash-alert)).
-- **How it works:** ARTEx translates high-level tactical goals written in plain language into machine commands executed by AI agents, requiring minimal human interaction beyond the initial objective. It can plug into **any LLM** — frontier models from Anthropic and OpenAI, open-source models, and non-U.S. models.
-- **Provenance:** Released on GitHub in August by account "Autumn-27" (identified as Chinese cybersecurity engineer Li Puhua). The developer published a statement on **Oct 8** saying the tool was abused by malicious actors, denied responsibility, and took the repository down — but the FBI notes it "continues to proliferate through community forks, localized variations, archived copies, and a commercial version."
-- **Campaigns attributed:** A widespread compromise of customers of U.S. IT company **ConnectWise** (intruders with stolen Cloud Backup credentials hammering cloud endpoints at ~2,900 login attempts/min, which Microsoft attributes to China-linked **Storm-0940**) and a wave of attacks on **South Korean financial institutions**, which the FBI says succeeded largely due to weak defenses and missing MFA.
-- **Targets:** Financial services, government, tech, defense, telecom/ISPs, and law firms.
-- **Exposed consoles:** Censys research found **1,600+ publicly exposed ARTEx console instances**; hundreds were found online *without a password* — including the system used in the South Korea campaign.
-- **Context:** Google separately warned (Oct 29) that agentic AI frameworks have pushed hacking to an "inflection point" ([CIO Dive](https://www.ciodive.com/news/ai-agentic-frameworks-artex-google-fbi/874798/)); Dark Reading reports ARTEx forks plus ~45 similar AI pentest tools remain capable of executing attacks at machine speed ([Dark Reading](https://www.darkreading.com/cyberattacks-data-breaches/artex-ai-pen-test-tool-hackers-weapon)).
+- **Google GTIG: `exploit_agent` ran discovery → exploitation with no human in the loop.** Google Threat Intelligence Group reported (Nov 17) the first observed use of an AI framework to automate *both* vulnerability discovery and exploitation end-to-end. Found on an exposed staging server, `exploit_agent` diffed patched vs. unpatched web-app code, generated working exploits, executed them, and stored victim data plus webshell/recon scripts — with targeting hints at French media and education. GTIG also observed APT and cybercrime groups adopting multi-agent frameworks (**Artex, Cairn, CyberStrikeAI**) and warns **fully autonomous agentic attacks are ~3 months away** ([SecurityWeek](https://www.securityweek.com/ai-framework-autonomously-weaponized-flaws-in-real-attacks-google-says/), [Help Net Security](https://www.helpnetsecurity.com/2026/11/17/ai-powered-cyberattacks-gtig-report/), [CPO Magazine](https://www.cpomagazine.com/cyber-security/google-expect-autonomous-ai-cyber-attacks-from-criminal-groups-within-three-months/)).
+- **European Commission breached via ARTEx.** The EU executive confirmed (Nov 19) an AI-assisted cyberattack on internal HR and medical-reimbursement systems in late October — several applications disrupted for ~10 days, staff personal data possibly exposed. Attribution points to the same open-source ARTEx framework the FBI flash-alerted on in Week 46. "No one is immune," an EC spokesperson said ([The Register](https://www.theregister.com/cyber-crime/2026/11/19/european_commission_scrambles_to_contain_ai_assisted_cyberattack/5311103), [CSO Online](https://www.csoonline.com/article/4251068/european-commission-hr-hit-by-cyber-attack.html), [Computer Weekly](https://www.computerweekly.com/news/366654974/AI-red-team-tool-Artex-likely-behind-cyber-attack-on-EU-body)).
+- **China-linked actors used Cairn to find a zero-day.** Amazon's Threat Intelligence team disclosed (Nov 20) that attackers used the open-source autonomous pentest framework **Cairn** against East Asian universities, apparently discovering a previously unknown vulnerability and taking over a server. An exposed Cairn instance with Simplified-Chinese prompts and China Standard Time timestamps revealed the operator's playbook — a rare direct look inside an agentic attack campaign. Amazon's message to defenders: **automate, or lose the speed race** ([The Record](https://therecord.media/amazon-research-cairn-ai-university-attacks-possible-zero-day), [Bleeping Computer](https://www.bleepingcomputer.com/news/security/hackers-use-autonomous-ai-tool-cairn-to-find-zero-day-take-over-server/)).
 
-**Why it matters:** the defensive takeaway is uncomfortable — the FBI notes ARTEx intrusions are often *noisy* (they generate reams of traffic that trigger alerts), meaning detection exists but **response speed** is now the bottleneck. If an attacker goes from recon to privileged access in 3 hours, human-speed triage loses by default.
+**Why it matters:** three independent confirmations in one week (Google, EU, Amazon) that open-weight frameworks + any capable LLM now execute real, unattended intrusion chains. The capability is in the harness, not the weights — and the harnesses are on GitHub.
 
-### 🏢 Anthropic
+## 📊 The week's other top items
 
-- **Claude Fable 5.2 and Claude Mythos 5.2 launched (Nov 10).** Two models on the same base: Fable targets coding, Mythos is the cybersecurity-focused line — Anthropic says Mythos 5.2 is markedly better at **finding software vulnerabilities** and completing complex engineering tasks. The first Mythos (April) was restricted to a select group of organizations; 5.2 is a broader release ([CNBC](https://www.cnbc.com/2026/11/09/anthropic-claude-fable-5-2-mythos-5-2.html), [CSO Online](https://www.csoonline.com/article/4246688/anthropic-sharpens-ai-coding-and-security-capabilities-with-mythos-5-2.html)).
-- **Cisco AI Defense added Claude Mythos to its adaptive red-teaming engine (Nov 10)** — one of the first AI security products to embed a frontier model for automated adversarial testing ([Cisco blog](https://blogs.cisco.com/ai/cisco-ai-defense-to-add-anthropics-claude-mythos-for-ai-red-teaming), [CRN](https://www.crn.com/news/networking/2026/cisco-puts-anthropic-s-claude-mythos-behind-ai-defense-red-teaming)).
-- **CrowdStrike extended Falcon Guardian (AIDR) to cover Anthropic Claude Cowork enterprise deployments (Nov 2)** — detection-and-response for AI agents themselves ([Business Wire](https://www.businesswire.com/news/home/20261103896714/en/CrowdStrike-Extends-Anthropics-Claude-Cowork-Enterprise-AI-Adoption-with-Falcon-Guardian-Protection)).
-- **IPO backdrop:** Anthropic kicked off its IPO roadshow Nov 10 at a reported ~$1.4T valuation; analysts (and Jim Cramer) are flagging **cybersecurity as a potential next $100B revenue line** for the company ([Reuters](https://finance.yahoo.com/technology/ai/articles/anthropics-path-ai-startup-industry-235243135.html), [TIKR](https://finance.yahoo.com/technology/ai/articles/jim-cramer-anthropic-next-100-022251773.html)).
-- Recall the counterpoint from October: JPMorgan's Jamie Dimon claimed Mythos "hacked real companies" and drove cyber risk up tenfold — the debate over frontier-model cyber capability is now mainstream.
+- **Cyber insurance repricing:** Marsh data (Nov 17) shows cyber insurance costs jumping **~10%** as AI-accelerated attacks drive reported incidents up — one of the first hard market-priced signals of AI's attack impact ([PYMNTS](https://www.pymnts.com/cybersecurity/2026/cyber-insurance-costs-to-jump-10percent-amid-rising-ai-attacks/), [Insurance Journal](https://www.insurancejournal.com/news/national/2026/11/17/892881.htm)).
+- **ZeroFox 2027 Threat Forecast (Nov 18):** predicts agentic AI + closed criminal networks as the defining cybercrime pattern of 2027 — faster attacks, better evasion, more automation as law-enforcement pressure pushes operations underground ([press release](https://markets.businessinsider.com/news/stocks/zerofox-2027-threat-forecast-report-signals-an-era-of-cybercrime-marked-by-the-rise-of-agentic-ai-and-closed-criminal-networks-1036778999)).
+- **Fortune, "just the opening chapter" (Nov 18):** top cyber experts warn the US is structurally under-prepared for machine-speed offense; Secretary Rubio's "not under systemic attack" framing is challenged by the bug/patch data.
 
-### 🏢 OpenAI
+## 🏢 Microsoft Ignite 2026 — security gets its own models
 
-- **GPT-5.6 Sol's PHP findings (October, still rippling).** OpenAI disclosed that GPT-5.6 Sol discovered critical vulnerabilities in PHP ("php2shell"), affecting an estimated ~70% of websites. Governments and corporations scrambled to patch overnight; some sites went dark preemptively; the NSA issued a warning ([USA Today](https://www.usatoday.com/story/news/nation/2026/10/21/php-vulnerability-php2shell-updates--live/92362348007/)). The strategic question raised by analysts: *what happens when AI finds bugs faster than the world can fix them?* ([Eurasia Review](https://www.eurasiareview.com/01112026-when-ai-finds-bugs-faster-than-the-world-can-fix-them-analysis/)).
-- **Internal security scrutiny:** Reuters reported (Nov 3) that OpenAI employees had warned leadership for years about operational-security risks ([Unite.AI summary](https://www.unite.ai/openai-employees-warned-for-years-about-internal-security-risks/)).
-- **Attackers use defenders' tools too:** Hacktron AI researchers demonstrated gaining access to an OpenAI employee's ChatGPT account using Anthropic's Claude — a reminder that AI-on-AI attacks cut across vendors ([Forbes](https://www.forbes.com/sites/siladityaray/2026/09/18/security-researchers-hacked-into-openai-using-anthropics-claude/)).
-- **Regulatory pressure:** The FTC is probing OpenAI, Anthropic and other AI firms over safety claims and risks tied to increasingly autonomous systems ([TechRepublic](https://www.techrepublic.com/article/news-ftc-openai-anthropic-ai-consumer-harms/)); on Nov 13 a coalition of advocacy groups sued five leading AI companies seeking to halt further model development, citing catastrophic-risk concerns including cyberattacks ([AP](https://apnews.com/article/artificial-intelligence-ai-lawsuit-cyberattacks-anthropic-openai-03ece37b96979fe834f60976648504ba)).
+- **MAI Cyber 2 Flash** (Nov 17–18): Microsoft shipped specialized cybersecurity and coding models (7 new MAI models total), matching Claude/GPT on domain benchmarks at lower cost — the first hyperscaler to productize a dedicated frontier *cyber defense* model ([Microsoft Security Blog](https://www.microsoft.com/en-us/security/blog/2026/11/17/security-for-the-agentic-era-powered-by-microsoft-perception/), [PYMNTS](https://www.pymnts.com/news/artificial-intelligence/2026/microsoft-introduces-new-models-to-cut-the-cost-of-ai-coding-and-cybersecurity/)).
+- **Microsoft Perception** is now generally available (Nov 17–18): AI agents that detect, investigate, and fix threats — Microsoft's answer to autonomous defense, tightly coupled to Defender/Sentinel/Entra Agent ID ([blog](https://www.microsoft.com/en-us/security/blog/2026/11/17/security-for-the-agentic-era-powered-by-microsoft-perception/)).
+- **AI Agent Audit Standards initiative (Nov 18):** a transparency framework for auditing agent actions — though critics note it launched with **no published spec, log format, or deadline** ([Tech Times](https://www.techtimes.com/articles/330991/20261118/microsoft-unveils-ai-agent-audit-standards-initiative-no-spec-log-format-deadline.htm)).
+- **Cato Networks AgentSense (Nov 17):** runtime security that stops harmful agent actions *before execution* by tracing how untrusted content (indirect prompt injection) steers an agent's workflow — valid credentials no longer imply safe behavior. Backed by a $10,000 adversarial challenge ([Unite.AI](https://www.unite.ai/cato-networks-agentsense-ai-agent-runtime-security/)).
+- **Menlo Security (Nov 19):** CEO Bill Robbins doubles down on securing AI agents and employee AI usage — "the opportunity has never been bigger" ([CRN](https://www.crn.com/news/security/2026/menlo-security-ceo-bill-robbins-on-agentic-security-push-the-opportunity-has-never-been-bigger)).
 
-### 🏢 Cloudflare
+## 💰 Deals & market
 
-- **"Gatekeeping the agentic web."** Cloudflare posted record Q3 revenue of **$782.5M** (Nov 10), with CEO Matthew Prince positioning the company as the trust layer for an internet where bots already generate **~57% of web requests** — and where he forecasts bots could outnumber human traffic **1,000× within five years** ([Observer](https://observer.com/2026/11/matthew-prince-wants-cloudflare-to-gatekeep-the-agentic-web/), [The Next Web](https://thenextweb.com/news/cloudflare-matthew-prince-bots-1000x-human-traffic-verge)).
-- **Product line recap:** **Precursor** (session-level bot detection, launched July) catches sophisticated agentic traffic by watching a visitor's whole session rather than individual requests; the July 1 update split AI crawlers into three purpose-based categories and opened a waitlist for a **pay-per-crawl gateway** letting any site charge AI agents directly ([The Next Web](https://thenextweb.com/news/cloudflare-precursor-bots-agentic-web), [TechTimes](https://www.techtimes.com/articles/319554/20260702/cloudflare-separates-ai-crawlers-purpose-opens-door-charging-them-directly.htm)).
-- **Agent identity & transactions:** With GoDaddy, Infoblox and Google — in collaboration with Singapore's IMDA — Cloudflare demonstrated **cross-platform secure AI agent transactions** using open standards to verify agent identities (Oct 14, [PR Newswire](https://www.morningstar.com/news/pr-newswire/20261014la71756/godaddy-infoblox-google-and-cloudflare-demonstrate-secure-ai-agent-transactions-across-platforms)).
-- **OpenAI partnership:** The September **"Daybreak" security partnership** with OpenAI (NET stock +9% on the news) and an October research pilot routing Cloudflare edge signals into ChatGPT Search show the infrastructure-for-intelligence exchange deepening ([24/7 Wall St](https://247wallst.com/investing/2026/09/09/cloudflare-surges-9-on-openai-security-partnership-zscaler-rises-3/), [TechTimes](https://www.techtimes.com/articles/329138/20261016/chatgpt-search-gained-hundreds-millions-pages-link-crawlers-never-found.htm)).
+- **Palo Alto Networks acquires Applied Compute for $4.5B (all-stock, Nov 18).** A barely two-year-old startup founded by ex-OpenAI researchers (23-year-old CEO Yash Patil) building post-training and inference infrastructure for open-weight models. Security's largest player is buying model-training capability, not a security product — a structural bet that frontier-adjacent AI becomes part of the platform ([SiliconANGLE](https://siliconangle.com/2026/11/18/palo-alto-networks-bets-4-5b-on-ai-startup-applied-compute-as-earnings-top-forecasts/), [Help Net Security](https://www.helpnetsecurity.com/2026/11/19/palo-alto-networks-acquires-applied-compute/)).
+- Context: 2026 is on pace for a record cybersecurity M&A year driven by the AI scramble ([Dark Reading](https://www.darkreading.com/cybersecurity-analytics/ai-scramble-cybersecurity-ma-boom)); OpenAI reportedly floated $5B+ for interpretability lab Goodfire before talks fizzled.
 
-### 📰 Also this week
+## 📄 Research & papers (arXiv, week of Nov 16–22)
 
-- **CrowdStrike "AI Kill Switch" (Nov 3):** a tool to immediately halt runaway or compromised AI agents — the first of what will surely be a product category ([ForkLog](https://forklog.com/en/crowdstrike-introduces-kill-switch-for-ai-agents/)).
-- **Agentic identity is the new perimeter:** analysis of Microsoft Entra Agent ID and purpose-built agent governance as the emerging foundation of enterprise security ([Forbes](https://www.forbes.com/councils/forbestechcouncil/2026/11/10/ai-agents-are-moving-faster-than-trust-why-security-needs-a-new-foundation/)).
-- **AI safety vs. cybersecurity communities at odds:** TIME on the growing clash over who decides whether frontier models are safe to release ([TIME](https://www.msn.com/en-us/news/other/ai-safety-and-cybersecurity-should-be-allies-instead-theyre-at-odds/ar-AA2fJXAE?ocid=BingNewsVerp)).
+- **SoK: Assessing the Evolution of LLM Capability in Software Vulnerability Research** ([arXiv:2611.26601](https://arxiv.org/abs/2611.26601)) — introduces an autonomy-scale framework (modeled on driving-automation levels) to rate vendor and researcher claims about LLM vuln-finding, qualified by correctness and availability. The first serious attempt to normalize the hype vs. reality gap this digest keeps flagging.
+- **SCARVA** ([arXiv:2611.26218](https://arxiv.org/abs/2611.26218)) — multi-agent supply-chain vulnerability assessment: an ANALYST agent does security assessment while SCARVA records every tool call, file access and web request; independent JUDGE agents produce evidence-backed verdicts. Best analyst (Qwen 3.8) hits 82% balanced accuracy; Claude Opus 5.5 agrees with human annotators on 94% of claim checks.
+- **Origin** (arXiv 2611.26xxx) — backtracking tool for agent security incidents: maps trajectory logs to application-level compromise entry points via a cross-layer dependency graph, closing the semantic gap that stalls real-world agent-incident forensics.
+- **GEOHunter** ([arXiv:2611.26564](https://arxiv.org/abs/2611.26564)) — maps a generative-engine-optimization (GEO) manipulation network: 1,985 accounts, 466K inferred promotional placements, and 4.5–20% of cited pages in nine generative engines attributable to one paid-content operation. Prompt-injection-adjacent risk for LLM answers in medicine and finance.
+- **DailySafe** (arXiv 2611.26298) — benchmark for dynamic safety awareness in everyday multi-turn multimodal interactions: goes beyond isolated harmful-request tests toward risks that emerge as ordinary tasks unfold.
+- **PhantoMasq** (arXiv 2611.26xxx) — GNN-based detection of CAN-bus masquerade attacks in vehicles/industrial systems, modeling message-sequence graphs with statistical signal features.
+- **ChronoPatch** (arXiv 2611.26117) — black-box energy/latency attacks on vision-language models: weaponizing autoregressive response length as a denial-of-service surface against inference services.
 
-### 📄 Research & papers
+## 🛠 Projects & tools
 
-- **CHECKMATE** (arXiv): automated penetration testing combining LLM agents with **classical planning** (PDDL-style) — the hybrid beats a native Claude Code agent by >20% success rate while being >50% faster and cheaper. Lesson: don't ask the LLM to do long-horizon planning that algorithms solved in the 1970s ([overview + links](https://appsecsanta.com/research/ai-pentesting-agents-2026)).
-- **EnIGMA** (arXiv): interactive tooling (shell, debugger) substantially improves LM agents' ability to find security vulnerabilities in CTF-style benchmarks ([paper](https://arxiv.org/abs/2409.07894)).
-- **HPTSA** (arXiv): a **hierarchical planning + task agent** system where a planning agent spawns subagents — shown to exploit real-world zero-day vulnerabilities, addressing the long-range-planning weakness of single agents ([paper](https://arxiv.org/abs/2406.01637)).
-- **"LLM Agents for Automated Web Vulnerability Reproduction: Are We There Yet?"** (arXiv [2510.14700](https://arxiv.org/html/2510.14700)): evaluates 20 LLM agents across 16 dimensions on CVE reproduction; OpenHands and SWE-agent variants lead. Reproduction (not discovery) is the current bottleneck.
-- **Baseline to beat:** Fang et al. (2024) showed GPT-4 could exploit **87% of one-day CVEs** given the advisory description in context — the canonical number everyone still cites.
+- **GitHub × Microsoft Codename MDASH pilot (Nov 17):** AI triage of 9,791 raw findings → 99 human-reviewed private reports → **55 fixes shipped across AutoGPT, Caddy, Express, FastMCP, ImageMagick and Netty**. The funnel — AI breadth plus human depth — is the working template for AI-driven disclosure at scale. GitHub's own caveat: expert review capacity doesn't yet scale ([Unite.AI](https://www.unite.ai/github-pilot-turns-ai-security-findings-into-55-open-source-fixes/)).
+- **Agent Name Service (ANS)** is live at the Linux Foundation (Nov 10) — DNS-style identity for AI agents; the standards-based complement to Week 46's agent-identity theme ([Unite.AI](https://www.unite.ai/linux-foundation-launches-agent-name-service-for-ai-agent-identity/)).
+- **ARTEx/Cairn exposure continues:** hundreds of publicly accessible pentest-agent servers remain exposed to the web — each one is both a staging ground and a telemetry gift for defenders ([TechCrunch](https://www.msn.com/en-us/technology/artificial-intelligence/hundreds-of-artex-ai-hacking-tools-found-publicly-exposed-to-the-web/ar-AA2gTWnU)).
 
-### 🛠 Projects & tools
+## 🪤 Open problems this week
 
-- **ARTEx forks** — despite the takedown, forks and a commercial variant remain active (see top story). Defenders: assume your adversary has this.
-- **39+ AI pentesting agents tested** in one 2026 survey — a useful map of the offensive-agent landscape and where hybrids win ([AppSec Santa research](https://appsecsanta.com/research/ai-pentesting-agents-2026)).
-- **CrowdStrike Falcon Guardian AIDR** — agent detection & response, now covering Claude Cowork.
+1. **The defense mandate is now explicit.** Amazon's "defenders must automate" and Microsoft's autonomous-defense GA are the same conclusion: human-speed triage cannot survive machine-speed offense. The open question is Week 46's #1 — accountability when an agent isolates production.
+2. **Zero-days found by agents are now confirmed in the wild** (Cairn, universities). Bug-bounty economics, patch SLAs and disclosure norms all assume humans find bugs. None of that machinery is calibrated for a framework that diffs patches and ships exploits overnight.
+3. **Runtime agent security has no standard.** AgentSense (Cato), Perception (Microsoft), Agent ID (Entra) and ANS (Linux Foundation) attack the same problem — can an agent be trusted to act — with four incompatible architectures. Expect a land-grab year.
+4. **Benchmark inflation vs. autonomy reality.** The new SoK framework shows vendor claims are scattered and incomparable. Without a shared autonomy scale, boards and buyers cannot tell a Level-2 copilot from a Level-4 autonomous operator.
 
-### 🧭 Open problems this week
+## 📌 What to watch
 
-1. **Response-speed asymmetry.** Machine-speed offense vs. human-speed SOC triage. Autonomous *defense* (auto-triage, auto-isolate) is the obvious answer and nobody has shipped a trustworthy version of it.
-2. **Agent identity.** Agents act, pay, and authenticate — but most enterprises can't enumerate their agents, let alone revoke them. Entra Agent ID, Cloudflare/IMDA agent-identity work, and CrowdStrike's kill switch are early stabs at the same problem from different angles.
-3. **Disclosure at AI speed.** GPT-5.6 Sol's PHP findings showed discovery can outrun coordinated patching. What does responsible disclosure look like when the finder is a model and the vulnerable population is 70% of the web?
-4. **Model-agnostic tool control.** ARTEx works with *any* LLM. Capability lives in the tool harness, not just the weights — which complicates both export control and safety evaluations that test models in isolation.
+- Whether GTIG's "~3 months" to fully autonomous criminal attacks ages as a forecast or an underestimate — the Cairn zero-day suggests it may be conservative.
+- Palo Alto's integration of Applied Compute: first sign of a security vendor fielding its own post-trained frontier model.
+- Microsoft's Agent Audit Standards: does a concrete spec land, or does the community standardize on ANS first?
 
 ---
 
@@ -112,9 +114,10 @@ The FBI issued a **flash advisory** warning that threat actors are using **ARTEx
 
 ## Archives
 
-| Edition | Week | Highlights |
-|---------|------|------------|
-| [Week 46](#week-46--nov-916-2026) | Nov 9–16, 2026 | FBI ARTEx flash alert; Claude Fable/Mythos 5.2; Cisco AI Defense × Mythos; Cloudflare agentic-web strategy; CHECKMATE/HPTSA research |
+| # | Edition | Week | Highlights |
+|---|---------|------|------------|
+| 1 | [Week 47 — Nov 16–23, 2026](issues/2026-W47-nov-16-23.md) | Nov 16–23, 2026 | GTIG exploit_agent (first autonomous AI attack chain); EC ARTEx breach; Amazon: Cairn zero-day vs universities; MAI Cyber 2 Flash @ Ignite; Palo Alto buys Applied Compute $4.5B |
+| 2 | [Week 46 — Nov 9–16, 2026](issues/2026-W46-nov-09-16.md) | Nov 9–16, 2026 | FBI ARTEx flash alert; Claude Fable/Mythos 5.2; Cisco AI Defense × Mythos; Cloudflare agentic-web strategy; CHECKMATE/HPTSA research |
 
 ## Contributing
 
